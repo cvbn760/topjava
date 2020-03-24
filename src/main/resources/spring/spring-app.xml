@@ -15,10 +15,15 @@
     <!-- Not necessary, already included with component-scan -->
     <!--<context:annotation-config/>-->
 
-    <bean class="ru.javawebinar.topjava.repository.inmemory.InMemoryMealRepository" id="inMemoryMealRepository"/>
 
-    <bean class="ru.javawebinar.topjava.service.MealService" id="serviceMeal">
+    <bean id="inMemoryMealRepository" class="ru.javawebinar.topjava.repository.inmemory.InMemoryMealRepository"/>
+
+    <bean id="serviceMeal" class="ru.javawebinar.topjava.service.MealService">
         <constructor-arg name="repository" ref="inMemoryMealRepository"/>
+    </bean>
+
+    <bean id="MealRestController" class="ru.javawebinar.topjava.web.meal.MealRestController">
+        <property name="service" ref="serviceMeal"/>
     </bean>
 
     <context:component-scan base-package="ru.javawebinar.**.repository"/>
