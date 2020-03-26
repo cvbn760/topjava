@@ -29,7 +29,11 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        mealRestController.methodGet(request, response);
+        try {
+            mealRestController.methodGet(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
