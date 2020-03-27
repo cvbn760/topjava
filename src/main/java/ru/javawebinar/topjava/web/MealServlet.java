@@ -14,11 +14,12 @@ import java.io.IOException;
 public class MealServlet extends HttpServlet {
 
     private MealRestController mealRestController;
+    private ConfigurableApplicationContext appCtx;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
+        appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
         mealRestController = (MealRestController) appCtx.getBean("MealRestController");
     }
 
@@ -36,5 +37,9 @@ public class MealServlet extends HttpServlet {
         }
     }
 
-
+    @Override
+    public void destroy() {
+        super.destroy();
+        appCtx.close();
+    }
 }

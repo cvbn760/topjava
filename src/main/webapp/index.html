@@ -10,5 +10,14 @@
     <li><a href="users">Users</a></li>
     <li><a href="meals">Meals</a></li>
 </ul>
+<br>
+<form id="form_profile" method="post" action="/users">
+    <label>Выбрать пользователя:</label>
+    <select name="profile">
+        <option value="1">User</option>
+        <option value="2">Admin</option>
+    </select>
+        <button type="submit">Выбрать</button>
+</form>
 </body>
 </html>
