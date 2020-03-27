@@ -40,7 +40,7 @@ public class MealRestController {
         Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
-                Integer.parseInt(request.getParameter("calories")), SecurityUtil.authUserId());
+                Integer.parseInt(request.getParameter("calories")));
         log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
         service.save(meal);
         response.sendRedirect("meals");
@@ -60,7 +60,7 @@ public class MealRestController {
             case "update":
                 final Meal meal = "create".equals(action) ?
                         new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-                                "", 1000, SecurityUtil.authUserId()) :
+                                "", 1000) :
                         service.get(getId(request));
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
