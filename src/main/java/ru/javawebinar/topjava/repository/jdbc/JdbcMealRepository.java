@@ -7,6 +7,7 @@ import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
@@ -26,33 +27,34 @@ public class JdbcMealRepository implements MealRepository {
 
     private final SimpleJdbcInsert insertMeal;
 
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
     @Autowired
-    public JdbcMealRepository(JdbcTemplate jdbcTemplate) {
+    public JdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.insertMeal = new SimpleJdbcInsert(jdbcTemplate).withTableName("meals").usingGeneratedKeyColumns("id");
-
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
     @Override
     public Meal save(Meal meal, int userId) {
+        MapSqlParameterSource map = new MapSqlParameterSource();
+        map.addValue("id", meal.getId());
+        map.addValue("datetime", meal.getDateTime());
+        map.addValue("description", meal.getDescription());
+        map.addValue("calories", meal.getCalories());
+        map.addValue("userId", userId);
+
         if (meal.isNew()){
-            log.info("save meal {} for user {}", meal, userId);
-            String sql = String.format("INSERT INTO meals (userid, datetime, description, calories)" +
-                            "VALUES (%d, '%s', '%s', '%s');",userId, DateTimeUtil.toString(meal.getDateTime()),
-                    meal.getDescription(), meal.getCalories());
-            return jdbcTemplate.update(sql) == 0 ? null : meal;
+            Number newId = insertMeal.executeAndReturnKey(map);
+            meal.setId(newId.intValue());
         }
-        else if (!meal.isNew()){
-            log.info("update meal {} for user {}", meal, userId);
-            String sql = String.format("UPDATE meals SET id=%d, userid=%d, datetime='%s', description='%s'," +
-                            "calories=%d WHERE id=%d;",
-                    meal.getId(), userId, DateTimeUtil.toString(meal.getDateTime()), meal.getDescription(),
-                    meal.getCalories(), meal.getId());
-            return jdbcTemplate.update(sql) == 0 ? null : meal;
-        }
-        else {
+        else if(namedParameterJdbcTemplate.update("UPDATE meals " +
+                "SET description=:description, calories=:calories, datetime=:datetime " +
+                "WHERE id=:id AND userId=:userId;", map) == 0){
             return null;
         }
+        return meal;
     }
 
     @Override

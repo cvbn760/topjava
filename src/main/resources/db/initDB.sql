@@ -25,12 +25,13 @@ CREATE TABLE user_roles
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
-CREATE TABLE meals
-(
-    id             SERIAL,
-    userId         INTEGER NOT NULL,
-    dateTime       TIMESTAMP DEFAULT now() NOT NULL,
-    description    VARCHAR(255) NOT NULL,
-    calories       INTEGER NOT NULL,
-    FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE
+CREATE TABLE meals (
+    id          INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
+    userid      INTEGER   NOT NULL,
+    datetime    TIMESTAMP NOT NULL,
+    description TEXT      NOT NULL,
+    calories    INT       NOT NULL,
+    FOREIGN KEY (userid) REFERENCES users (id) ON DELETE CASCADE
 );
+CREATE UNIQUE INDEX meals_unique_user_datetime_idx
+    ON meals (userid, datetime);
