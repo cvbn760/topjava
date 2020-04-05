@@ -67,4 +67,26 @@ public class Meal extends AbstractBaseEntity {
                 ", calories=" + calories +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null) {
+            return false;
+        }
+
+        if (!(obj instanceof Meal)) {
+            return false;
+        }
+
+        Meal meal = (Meal) obj;
+
+        return this.id.intValue() == meal.id.intValue()
+                && this.dateTime.compareTo(meal.dateTime) == 0
+                && this.description.equalsIgnoreCase(meal.description)
+                && this.calories == meal.calories;
+    }
 }
