@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.context.TestContext;
 import ru.javawebinar.topjava.model.User;
@@ -16,25 +17,22 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static ru.javawebinar.topjava.UserTestData.ADMIN;
-
+@Controller
 public class InMemoryAdminRestControllerTest {
     private static final Logger log = LoggerFactory.getLogger(InMemoryAdminRestControllerTest.class);
 
-    private static ConfigurableApplicationContext appCtx;
     private static AnnotationConfigApplicationContext annCtx;
     private static AdminRestController controller;
 
     @BeforeClass
     public static void beforeClass() {
-        appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
         annCtx = new AnnotationConfigApplicationContext(TestContext.class);
-        log.info("\n{}\n", Arrays.toString(appCtx.getBeanDefinitionNames()));
-        controller = appCtx.getBean(AdminRestController.class);
+        log.info("\n{}\n", Arrays.toString(annCtx.getBeanDefinitionNames()));
+        controller = annCtx.getBean("AdminRestController",AdminRestController.class);
     }
 
     @AfterClass
     public static void afterClass() {
-        appCtx.close();
         annCtx.close();
     }
 
