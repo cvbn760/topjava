@@ -1,14 +1,12 @@
 package ru.javawebinar.topjava.repository.jpa;
 
-import org.hibernate.annotations.Proxy;
-import org.hsqldb.Session;
 import org.springframework.dao.support.DataAccessUtils;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,12 +25,14 @@ public class JpaMealRepository implements MealRepository {
     public Meal save(Meal meal, int userId) {
         User ref = em.getReference(User.class, userId);
         meal.setUser(ref);
-        meal.setUser_id(userId);
         if (meal.isNew()) {
             em.persist(meal);
             return meal;
         }
         else {
+            if (get(meal.getId(),userId) == null) {
+                return null;
+            }
             return em.merge(meal);
         }
     }

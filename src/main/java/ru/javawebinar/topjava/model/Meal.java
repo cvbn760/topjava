@@ -9,25 +9,20 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @NamedQueries({
-        @NamedQuery(name = Meal.GET_ALL, query = "SELECT ms FROM Meal ms WHERE ms.user_id=:user_id ORDER BY ms.dateTime DESC"),
-        @NamedQuery(name = Meal.GET_ONE, query = "SELECT ms FROM Meal ms WHERE ms.user_id=:user_id AND ms.id=:id"),
-        @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal ms WHERE ms.id=:id AND ms.user_id=:user_id"),
-        @NamedQuery(name = Meal.GET_BETWEEN, query = "SELECT ms FROM Meal ms WHERE ms.dateTime>=:after AND ms.dateTime<:before AND ms.user_id=:user_id  ORDER BY ms.dateTime DESC"),
+        @NamedQuery(name = Meal.GET_ALL, query = "SELECT ms FROM Meal ms WHERE user_id=:user_id ORDER BY ms.dateTime DESC"),
+        @NamedQuery(name = Meal.GET_ONE, query = "SELECT ms FROM Meal ms WHERE user_id=:user_id AND ms.id=:id"),
+        @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal ms WHERE ms.id=:id AND user_id=:user_id"),
+        @NamedQuery(name = Meal.GET_BETWEEN, query = "SELECT ms FROM Meal ms WHERE ms.dateTime>=:after AND ms.dateTime<:before AND user_id=:user_id  ORDER BY ms.dateTime DESC"),
 })
 
 @javax.persistence.Entity
-@Table(name = "meals", uniqueConstraints = {@UniqueConstraint(columnNames = {"date_time","user_id"}, name = "meals_unique_user_datetime_idx")})
+@Table(name = "meals", uniqueConstraints = {@UniqueConstraint(columnNames = {"date_time"}, name = "meals_unique_user_datetime_idx")})
 @Access(AccessType.FIELD)
 public class Meal extends AbstractBaseEntity {
     public static final String GET_ALL = "Meals.getAll";
     public static final String GET_ONE = "Meals.getOne";
     public static final String DELETE = "Meals.delete";
-    public static final String SAVE = "Meals.save";
     public static final String GET_BETWEEN = "Meals.getBetween";
-
-  //  @NotNull
-   // @Column(name = "user_id", nullable = false)
-    private int user_id;
 
     @NotNull
     @Column(name = "date_time", nullable = false)
@@ -44,7 +39,7 @@ public class Meal extends AbstractBaseEntity {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Meal() {
@@ -99,14 +94,6 @@ public class Meal extends AbstractBaseEntity {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public int getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
     }
 
     @Override
