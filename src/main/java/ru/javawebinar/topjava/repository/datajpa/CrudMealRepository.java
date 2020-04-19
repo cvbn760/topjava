@@ -16,18 +16,18 @@ public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
     @Transactional
     @Modifying
     @Query("SELECT ms FROM Meal ms WHERE ms.user.id=:user_id ORDER BY ms.dateTime DESC")
-    List<Meal> findAll(@Param("user_id") int userId);
+    List<Meal> getAll(@Param("user_id") int userId);
 
     @Transactional
     @Modifying
     @Query("SELECT ms FROM Meal ms WHERE ms.id=:id AND ms.user.id=:user_id")
-    List<Meal> findOne(@Param("id") int id, @Param("user_id") int userId);
+    List<Meal> get(@Param("id") int id, @Param("user_id") int userId);
 
 
     @Transactional
     @Modifying
     @Query("SELECT ms FROM Meal ms WHERE ms.user.id=:userId AND ms.dateTime>=:after AND ms.dateTime<:before ORDER BY ms.dateTime DESC")
-    List<Meal> findAllBetweenDateTime(@Param("after") LocalDateTime startDateTime, @Param("before") LocalDateTime endDateTime, @Param("userId") int userId);
+    List<Meal> getBetweenHalfOpen(@Param("after") LocalDateTime startDateTime, @Param("before") LocalDateTime endDateTime, @Param("userId") int userId);
 
     @Transactional
     @Modifying
