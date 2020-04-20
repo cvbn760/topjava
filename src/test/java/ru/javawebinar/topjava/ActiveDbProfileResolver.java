@@ -7,6 +7,18 @@ public class ActiveDbProfileResolver implements ActiveProfilesResolver {
 
     @Override
     public String[] resolve(Class<?> aClass) {
-        return new String[]{Profiles.getActiveDbProfile(), Profiles.DATAJPA};
+        switch (aClass.getSimpleName()) {
+            case "JdbcUserServiceTest":
+            case "JdbcMealServiceTest":
+                return new String[]{Profiles.POSTGRES_DB, Profiles.JDBC};
+            case "JpaUserServiceTest":
+            case "JpaMealServiceTest":
+                return new String[]{Profiles.POSTGRES_DB, Profiles.JPA};
+            case "DataJpaUserServiceTest":
+            case "DataJpaMealServiceTest":
+                return new String[]{Profiles.POSTGRES_DB, Profiles.DATAJPA};
+            default:
+                return null;
+        }
     }
 }
