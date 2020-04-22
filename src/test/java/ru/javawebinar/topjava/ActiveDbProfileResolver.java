@@ -10,13 +10,13 @@ public class ActiveDbProfileResolver implements ActiveProfilesResolver {
         switch (aClass.getSimpleName()) {
             case "JdbcUserServiceTest":
             case "JdbcMealServiceTest":
-                return new String[]{Profiles.POSTGRES_DB, Profiles.JDBC};
+                return new String[]{Profiles.HSQL_DB, Profiles.JDBC};
             case "JpaUserServiceTest":
             case "JpaMealServiceTest":
-                return new String[]{Profiles.POSTGRES_DB, Profiles.JPA};
+                return new String[]{Profiles.HSQL_DB, Profiles.JPA};
             case "DataJpaUserServiceTest":
             case "DataJpaMealServiceTest":
-                return new String[]{Profiles.POSTGRES_DB, Profiles.DATAJPA};
+                return new String[]{Profiles.HSQL_DB, Profiles.DATAJPA};
             default:
                 return null;
         }
