@@ -68,6 +68,10 @@ public abstract class MealServiceTest {
 
     private MealRepository repository;
 
+    public MealService getService() {
+        return service;
+    }
+
     public void setRepository(MealRepository repository) {
         this.repository = repository;
     }

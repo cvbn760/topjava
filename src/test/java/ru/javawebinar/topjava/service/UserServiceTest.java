@@ -44,6 +44,10 @@ public abstract class UserServiceTest {
         this.repository = repository;
     }
 
+    public UserService getService() {
+        return service;
+    }
+
     @Autowired
     private CacheManager cacheManager;
 
