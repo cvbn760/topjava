@@ -60,12 +60,7 @@ public class UserService {
     }
 
     @Transactional
-    public Map<User, Meal> getUserWithMeal(int id){
-        Map<User, Meal> userMealMap = new HashMap<>();
-        User user = checkNotFoundWithId(repository.get(id), id);
-        List<Meal> meals = mealRepository.getAll(user.getId());
-        meals.stream().forEach(meal -> userMealMap.put(user, meal));
-        // meals.stream().map(meal -> userMealMap.put(user, meal)).forEach(System.out::println);
-        return userMealMap;
+    public User getWithMeals(int id) {
+        return checkNotFoundWithId(repository.getWithMeals(id), id);
     }
 }

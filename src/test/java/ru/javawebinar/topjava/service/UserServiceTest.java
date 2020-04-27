@@ -37,7 +37,7 @@ public abstract class UserServiceTest {
     private static StringBuilder results = new StringBuilder();
 
     @Autowired
-    private UserService service;
+    protected UserService service;
     private UserRepository repository;
 
     public void setRepository(UserRepository repository) {

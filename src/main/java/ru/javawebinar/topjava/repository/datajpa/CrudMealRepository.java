@@ -22,7 +22,6 @@ public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
     @Query("SELECT ms FROM Meal ms WHERE ms.id=:id AND ms.user.id=:user_id")
     List<Meal> get(@Param("id") int id, @Param("user_id") int userId);
 
-
     @Transactional
     @Modifying
     @Query("SELECT ms FROM Meal ms WHERE ms.user.id=:userId AND ms.dateTime>=:after AND ms.dateTime<:before ORDER BY ms.dateTime DESC")
@@ -38,4 +37,7 @@ public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
     @Modifying
     @Query("UPDATE Meal ms SET ms.dateTime=:dateTime, ms.description=:description, ms.calories=:calories WHERE ms.id=:id AND ms.user.id=:user_id")
     int save(@Param("id") int id, @Param("user_id") int userId, @Param("dateTime") LocalDateTime dateTime, @Param("description") String description, @Param("calories") int calories);
+
+    @Query("SELECT m FROM Meal m JOIN FETCH m.user WHERE m.id = ?1 and m.user.id = ?2")
+    Meal getWithUser(int id, int userId);
 }

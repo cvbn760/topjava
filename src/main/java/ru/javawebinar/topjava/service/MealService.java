@@ -53,11 +53,9 @@ public class MealService {
     }
 
     @Transactional
-    public Map<User, Meal> getMealWithUser(int id, int userId){
-        Map<User, Meal> mealMap = new HashMap<>();
-        Meal meal = checkNotFoundWithId(repository.get(id, userId), id);
-        User user = meal.getUser();
-        mealMap.put(user, meal);
-        return mealMap;
+    public Meal getWithUser(int id, int userId) {
+        return checkNotFoundWithId(repository.getWithUser(id, userId), id);
     }
+
+
 }

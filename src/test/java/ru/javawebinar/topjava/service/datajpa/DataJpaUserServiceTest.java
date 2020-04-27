@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.service.datajpa;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +13,13 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 import ru.javawebinar.topjava.service.UserServiceTest;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.util.Map;
 
 import static org.slf4j.LoggerFactory.getLogger;
 import static ru.javawebinar.topjava.MealTestData.MEAL_MATCHER;
-import static ru.javawebinar.topjava.UserTestData.USER_ID;
+import static ru.javawebinar.topjava.UserTestData.*;
 
 @ActiveProfiles(resolver = ActiveDbProfileResolver.class, profiles = Profiles.DATAJPA)
 public class DataJpaUserServiceTest extends UserServiceTest {
@@ -31,8 +33,15 @@ public class DataJpaUserServiceTest extends UserServiceTest {
     }
 
     @Test
-    public void getUserWithMeal(){
-        Map<User, Meal> actual = getService().getUserWithMeal(USER_ID);
-        MEAL_MATCHER.assertMath(actual, UserTestData.getUserWithMeal());
+    public void getWithMeals() throws Exception {
+        User user = service.getWithMeals(USER_ID);
+        USER_MATCHER.assertMatch(user, USER);
+        MealTestData.MEAL_MATCHER.assertMatch(user.getMeals(), MealTestData.MEALS);
+    }
+
+    @Test
+    public void getWithMealsNotFound() throws Exception {
+        Assert.assertThrows(NotFoundException.class,
+                () -> service.getWithMeals(1));
     }
 }
