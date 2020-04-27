@@ -8,17 +8,12 @@ import org.springframework.test.context.ActiveProfiles;
 import ru.javawebinar.topjava.ActiveDbProfileResolver;
 import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.Profiles;
-import ru.javawebinar.topjava.UserTestData;
-import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 import ru.javawebinar.topjava.service.UserServiceTest;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-import java.util.Map;
-
 import static org.slf4j.LoggerFactory.getLogger;
-import static ru.javawebinar.topjava.MealTestData.MEAL_MATCHER;
 import static ru.javawebinar.topjava.UserTestData.*;
 
 @ActiveProfiles(resolver = ActiveDbProfileResolver.class, profiles = Profiles.DATAJPA)

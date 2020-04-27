@@ -5,16 +5,11 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import ru.javawebinar.topjava.ActiveDbProfileResolver;
-import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.Profiles;
 import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.service.MealServiceTest;
-
-import java.util.Map;
 
 import static org.slf4j.LoggerFactory.getLogger;
 import static ru.javawebinar.topjava.MealTestData.ADMIN_MEAL_ID;
