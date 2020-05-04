@@ -17,6 +17,7 @@ import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 
 import javax.transaction.Transaction;
@@ -48,20 +49,19 @@ public class JdbcMealRepository implements MealRepository {
         this.transactionTemplate = transactionTemplate;
     }
 
-    // Программное описание транзакции
+    // Декларативное описание транзакции
+    @Transactional(propagation = Propagation.REQUIRED,
+            isolation = Isolation.SERIALIZABLE,
+            readOnly = false, timeout = 1,
+            rollbackFor= Exception.class)
     @Override
     public Meal save(Meal meal, int userId) {
-        transactionTemplate.execute(new TransactionCallback<Void>() {
-            @Override
-            public Void doInTransaction(TransactionStatus status) {
-                try {
                     MapSqlParameterSource map = new MapSqlParameterSource()
                             .addValue("id", meal.getId())
                             .addValue("description", meal.getDescription())
                             .addValue("calories", meal.getCalories())
                             .addValue("date_time", meal.getDateTime())
                             .addValue("user_id", userId);
-
                     if (meal.isNew()) {
                         Number newId = insertMeal.executeAndReturnKey(map);
                         meal.setId(newId.intValue());
@@ -74,15 +74,6 @@ public class JdbcMealRepository implements MealRepository {
                             return null;
                         }
                     }
-                }
-                catch (Exception exc){
-                    status.setRollbackOnly();
-                    exc.printStackTrace();
-                    return null;
-                }
-                return null;
-            }
-        });
         return meal;
     }
 
