@@ -11,9 +11,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
+import ru.javawebinar.topjava.util.ValidationUtil;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -45,12 +47,12 @@ public class JdbcUserRepository implements UserRepository {
     // Декларативное описание транзакции
     @Transactional(propagation = Propagation.REQUIRED,
             isolation = Isolation.SERIALIZABLE,
-            readOnly = false, timeout = 1,
+            readOnly = false, timeout = 2,
             rollbackFor= Exception.class)
     @Override
     public User save(User user) {
+        ValidationUtil.<User>validateForJdbc(user);
         BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
-
         if (user.isNew()) {
             Number newKey = insertUser.executeAndReturnKey(parameterSource);
             user.setId(newKey.intValue());
@@ -71,7 +73,7 @@ public class JdbcUserRepository implements UserRepository {
     // Декларативное описание транзакции
     @Transactional(propagation = Propagation.REQUIRED,
             isolation = Isolation.SERIALIZABLE,
-            readOnly = false, timeout = 1,
+            readOnly = false, timeout = 2,
             rollbackFor= Exception.class)
     @Override
     public boolean delete(int id) {
@@ -81,7 +83,7 @@ public class JdbcUserRepository implements UserRepository {
     // Декларативное описание транзакции
     @Transactional(propagation = Propagation.REQUIRED,
             isolation = Isolation.SERIALIZABLE,
-            readOnly = true, timeout = 1,
+            readOnly = true, timeout = 2,
             rollbackFor= Exception.class)
     @Override
     public User get(int id) {
@@ -92,7 +94,7 @@ public class JdbcUserRepository implements UserRepository {
     // Декларативное описание транзакции
     @Transactional(propagation = Propagation.REQUIRED,
             isolation = Isolation.SERIALIZABLE,
-            readOnly = true, timeout = 1,
+            readOnly = true, timeout = 2,
             rollbackFor= Exception.class)
     @Override
     public User getByEmail(String email) {
@@ -104,7 +106,7 @@ public class JdbcUserRepository implements UserRepository {
     // Декларативное описание транзакции
     @Transactional(propagation = Propagation.REQUIRED,
             isolation = Isolation.SERIALIZABLE,
-            readOnly = true, timeout = 1,
+            readOnly = true, timeout = 2,
             rollbackFor= Exception.class)
     @Override
     public List<User> getAll() {

@@ -7,24 +7,20 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.util.exception.NotFoundException;
+import ru.javawebinar.topjava.util.ValidationUtil;
 
 
-import javax.transaction.Transaction;
-import javax.transaction.TransactionManager;
-import java.sql.SQLException;
+import javax.validation.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class JdbcMealRepository implements MealRepository {
@@ -52,10 +48,11 @@ public class JdbcMealRepository implements MealRepository {
     // Декларативное описание транзакции
     @Transactional(propagation = Propagation.REQUIRED,
             isolation = Isolation.SERIALIZABLE,
-            readOnly = false, timeout = 1,
+            readOnly = false, timeout = 2,
             rollbackFor= Exception.class)
     @Override
     public Meal save(Meal meal, int userId) {
+        ValidationUtil.<Meal>validateForJdbc(meal);
                     MapSqlParameterSource map = new MapSqlParameterSource()
                             .addValue("id", meal.getId())
                             .addValue("description", meal.getDescription())
@@ -80,7 +77,7 @@ public class JdbcMealRepository implements MealRepository {
     // Декларативное описание транзакции
     @Transactional(propagation = Propagation.REQUIRED,
             isolation = Isolation.SERIALIZABLE,
-            readOnly = false, timeout = 1,
+            readOnly = false, timeout = 2,
             rollbackFor= Exception.class)
     @Override
     public boolean delete(int id, int userId) {
@@ -90,7 +87,7 @@ public class JdbcMealRepository implements MealRepository {
     // Декларативное описание транзакции
     @Transactional(propagation = Propagation.REQUIRED,
             isolation = Isolation.SERIALIZABLE,
-            readOnly = true, timeout = 1,
+            readOnly = true, timeout = 2,
             rollbackFor= Exception.class)
     @Override
     public Meal get(int id, int userId) {
@@ -103,7 +100,7 @@ public class JdbcMealRepository implements MealRepository {
     // Декларативное описание транзакции
     @Transactional(propagation = Propagation.REQUIRED,
             isolation = Isolation.SERIALIZABLE,
-            readOnly = true, timeout = 1,
+            readOnly = true, timeout = 2,
             rollbackFor= Exception.class)
     @Override
     public List<Meal> getAll(int userId) {
@@ -115,7 +112,7 @@ public class JdbcMealRepository implements MealRepository {
     // Декларативное описание транзакции
     @Transactional(propagation = Propagation.REQUIRED,
             isolation = Isolation.SERIALIZABLE,
-            readOnly = true, timeout = 1,
+            readOnly = true, timeout = 2,
             rollbackFor= Exception.class)
     @Override
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {

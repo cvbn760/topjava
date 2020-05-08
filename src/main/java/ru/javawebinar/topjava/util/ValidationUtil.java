@@ -1,12 +1,39 @@
 package ru.javawebinar.topjava.util;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.javawebinar.topjava.model.AbstractBaseEntity;
+import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
+import ru.javawebinar.topjava.web.meal.JspMealController;
+
+import javax.validation.*;
+import java.util.Set;
 
 public class ValidationUtil {
 
+    private static final Logger log = LoggerFactory.getLogger(ValidationUtil.class);
+
+    private static Validator validator;
+    private static ValidatorFactory factory;
+
+    static {
+        factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+    }
+
     private ValidationUtil() {
+    }
+
+    public static <T> void validateForJdbc(T object) {
+        Set<ConstraintViolation<T>> set = validator.validate((T) object);
+        if (!set.isEmpty()) {
+            for (ConstraintViolation<T> constraintViolation : set){
+                log.error(constraintViolation.getMessage());
+            }
+            throw new ConstraintViolationException(set);
+        }
     }
 
     public static <T> T checkNotFoundWithId(T object, int id) {
