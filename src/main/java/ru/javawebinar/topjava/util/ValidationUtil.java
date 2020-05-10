@@ -4,9 +4,7 @@ package ru.javawebinar.topjava.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.javawebinar.topjava.model.AbstractBaseEntity;
-import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
-import ru.javawebinar.topjava.web.meal.JspMealController;
 
 import javax.validation.*;
 import java.util.Set;
@@ -26,7 +24,7 @@ public class ValidationUtil {
     private ValidationUtil() {
     }
 
-    public static <T> void validateForJdbc(T object) {
+    public static <T> T validateForJdbc(T object) {
         Set<ConstraintViolation<T>> set = validator.validate((T) object);
         if (!set.isEmpty()) {
             for (ConstraintViolation<T> constraintViolation : set){
@@ -34,6 +32,7 @@ public class ValidationUtil {
             }
             throw new ConstraintViolationException(set);
         }
+        return object;
     }
 
     public static <T> T checkNotFoundWithId(T object, int id) {

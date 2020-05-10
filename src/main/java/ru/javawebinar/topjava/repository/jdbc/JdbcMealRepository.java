@@ -16,11 +16,9 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.ValidationUtil;
 
-
-import javax.validation.*;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
+
 
 @Repository
 public class JdbcMealRepository implements MealRepository {
