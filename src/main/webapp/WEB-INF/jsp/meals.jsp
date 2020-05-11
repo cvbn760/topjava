@@ -13,8 +13,6 @@
 <body>
 <jsp:include page="fragments/bodyHeader.jsp"/>
 <section>
-    <h3><a href="/meals/index.jsp"><spring_code:message code="app.home"/></a></h3>
-    <hr/>
     <h2><spring_code:message code="meal.title"/> </h2>
     <form method="get" action="meals/filter">
         <input type="hidden" name="action" value="filter">
