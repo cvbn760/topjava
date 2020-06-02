@@ -19,7 +19,16 @@ function makeEditable(ctx) {
 
 function add() {
     form.find(":input").val("");
+    $('input[name="id"]').val(0);
     $("#editRow").modal();
+}
+
+function update(id, dateTime, description, calories) {
+    $("#editRow").modal();
+    $('input[name="id"]').val(id);
+    $('input[name="dateTime"]').val(dateTime);
+    $('input[name="description"]').val(description);
+    $('input[name="calories"]').val(calories);
 }
 
 function deleteRow(id) {
