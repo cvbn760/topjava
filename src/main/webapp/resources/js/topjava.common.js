@@ -3,11 +3,6 @@ var context, form;
 function makeEditable(ctx) {
     context = ctx;
     form = $('#detailsForm');
-    $(".delete").click(function () {
-        if (confirm('Are you sure?')) {
-            deleteRow($(this).attr("id"));
-        }
-    });
 
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(jqXHR);
@@ -32,19 +27,36 @@ function update(id, dateTime, description, calories) {
 }
 
 function deleteRow(id) {
-    $.ajax({
-        url: context.ajaxUrl + id,
-        type: "DELETE"
-    }).done(function () {
-        updateTable();
-        successNoty("Deleted");
-    });
+    if (confirm('Are you sure?')) {
+        $.ajax({
+            url: context.ajaxUrl + id,
+            type: "DELETE"
+        }).done(function () {
+            context.updateTable();
+            successNoty("Deleted");
+        });
+    }
+}
+
+
+function updateTableByData(data) {
+    context.datatableApi.clear().rows.add(data).draw();
 }
 
 function updateTable() {
-    $.get(context.ajaxUrl, function (data) {
-        context.datatableApi.clear().rows.add(data).draw();
-    });
+    $.ajax({
+        type: "GET",
+        url: getFilterUrl(),
+    }).done(updateTableByData);
+}
+
+function getFilterUrl() {
+    var startDate = $('input[name="startDate"]').val();
+    var startTime = $('input[name="startTime"]').val();
+    var endDate = $('input[name="endDate"]').val();
+    var endTime = $('input[name="endTime"]').val();
+
+    return context.ajaxUrl + startDate + "/" + startTime + "/" + endDate + "/" + endTime;
 }
 
 function save() {
@@ -54,7 +66,7 @@ function save() {
         data: form.serialize()
     }).done(function () {
         $("#editRow").modal("hide");
-        updateTable();
+        context.updateTable();
         successNoty("Saved");
     });
 }

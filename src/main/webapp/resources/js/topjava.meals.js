@@ -1,4 +1,3 @@
-// $(document).ready(function () {
 $(function () {
     makeEditable({
             ajaxUrl: "ajax/meals/",
@@ -30,10 +29,12 @@ $(function () {
                 "order": [
                     [
                         0,
-                        "asc"
+                        "desc"
                     ]
                 ]
-            })
+            }),
+        updateTable: updateTable
         }
     );
 });
+
