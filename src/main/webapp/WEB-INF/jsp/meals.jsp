@@ -36,6 +36,11 @@
         <span class="fa fa-plus"></span>
         <spring:message code="meal.filter"/>
     </button>
+
+    <button class="btn btn-primary" onclick="clearFilter()">
+        <span class="fa fa-forward"></span>
+        <spring:message code="common.clear"/>
+    </button>
 </div>
 
     <div class="container">

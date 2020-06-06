@@ -50,6 +50,18 @@ function updateTable() {
     }).done(updateTableByData);
 }
 
+function clearFilter(){
+    $('input[name="startDate"]').val('');
+    $('input[name="startTime"]').val('');
+    $('input[name="endDate"]').val('');
+    $('input[name="endTime"]').val('');
+
+    $.ajax({
+        type: "GET",
+        url: context.ajaxUrl
+    }).done(updateTableByData)
+}
+
 function getFilterUrl() {
     var startDate = $('input[name="startDate"]').val();
     var startTime = $('input[name="startTime"]').val();
