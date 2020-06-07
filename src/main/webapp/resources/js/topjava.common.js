@@ -18,6 +18,19 @@ function add() {
     $("#editRow").modal();
 }
 
+function checkUser(checkbx,id) {
+    var enabled = checkbx.is(":checked");
+    console.log(id);
+        $.ajax({
+            url: "ajax/admin/users/" + id + "/" + enabled,
+            type: "POST"
+        }).done(function () {
+            $.get(context.ajaxUrl, function (data) {
+                context.datatableApi.clear().rows.add(data).draw();
+            });
+        });
+}
+
 function update(id, dateTime, description, calories) {
     $("#editRow").modal();
     $('input[name="id"]').val(id);
