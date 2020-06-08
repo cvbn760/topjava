@@ -1,5 +1,7 @@
 package ru.javawebinar.topjava.web.user;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,15 +18,19 @@ import java.util.StringJoiner;
 @RequestMapping("/ajax/admin/users")
 public class AdminUIController extends AbstractUserController {
 
+    private final Logger log = LoggerFactory.getLogger(AdminUIController.class);
+
     @Override
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<User> getAll() {
+        log.info("AJAX get all users");
         return super.getAll();
     }
 
     @Override
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public User get(@PathVariable("id") int id) {
+        log.info("AJAX get user id - {}", id);
         return super.get(id);
     }
 
@@ -32,11 +38,13 @@ public class AdminUIController extends AbstractUserController {
     @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
+        log.info("AJAX delete user id - {}", id);
         super.delete(id);
     }
 
     @PostMapping
     public ResponseEntity<String> createOrUpdate(@Valid UserTo userTo, BindingResult result) {
+        log.info("AJAX create or update user - {}", userTo.toString());
         if (result.hasErrors()) {
             StringJoiner joiner = new StringJoiner("<br>");
             result.getFieldErrors().forEach(
@@ -56,6 +64,7 @@ public class AdminUIController extends AbstractUserController {
     @PostMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void enable(@PathVariable int id, @RequestParam boolean enabled) {
+        log.info("AJAX create status user id - {}, status - {}", id, enabled);
         super.enable(id, enabled);
     }
 }

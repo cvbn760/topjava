@@ -28,16 +28,16 @@ public class Meal extends AbstractBaseEntity {
     public static final String GET_BETWEEN = "Meal.getBetween";
 
     @Column(name = "date_time", nullable = false)
-    @NotNull
+    @NotNull(message = "Date time cannot be null")
     private LocalDateTime dateTime;
 
     @Column(name = "description", nullable = false)
     @NotBlank
-    @Size(min = 2, max = 120)
+    @Size(min = 2, max = 120, message = "Description lenght may be min = 2 and max = 120")
     private String description;
 
     @Column(name = "calories", nullable = false)
-    @Range(min = 10, max = 5000)
+    @Range(min = 10, max = 5000, message = "Calories may be min = 10 and max = 5000")
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -80,8 +80,8 @@ public class Meal extends AbstractBaseEntity {
         return dateTime.toLocalTime();
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDateTime(String dateTime) {
+        this.dateTime = LocalDateTime.parse(dateTime);
     }
 
     public void setDescription(String description) {
