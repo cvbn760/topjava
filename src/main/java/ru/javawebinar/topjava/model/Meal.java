@@ -80,7 +80,11 @@ public class Meal extends AbstractBaseEntity {
         return dateTime.toLocalTime();
     }
 
-    public void setDateTime(String dateTime) {
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void setDateTime(String dateTime){
         this.dateTime = LocalDateTime.parse(dateTime);
     }
 
